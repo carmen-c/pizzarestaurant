@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-typedef NS_ENUM(NSInteger, PizzaSize){
+typedef NS_ENUM(NSUInteger, PizzaSize){
     small,
     medium,
     large

@@ -10,18 +10,46 @@
 
 #import "Kitchen.h"
 #import "Pizza.h"
+#import "Manager.h"
+#import "CheeryManager.h"
 
 int main(int argc, const char * argv[])
 {
 
     @autoreleasepool {
         
-        NSLog(@"Please pick your pizza size and toppings:");
-        
-        Kitchen *restaurantKitchen = [[Kitchen alloc]init];
-        
         while (TRUE) {
-            // Loop forever
+            // pizza store
+            Kitchen *restaurantKitchen = [[Kitchen alloc]init];
+            Manager *manager = nil;
+            CheeryManager *cheerymanager = nil;
+//        Manager
+        
+        char inputManager[100];
+        NSLog(@"Would you like a cheery manager or a manager?");
+        fgets(inputManager, 100, stdin);
+        
+        NSString *chosenManager = [[NSString alloc] initWithUTF8String:inputManager];
+        chosenManager = [chosenManager stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            
+        NSString *cheery = @"cheery";
+        NSString *chooseManager = @"manager";
+        if ([chosenManager rangeOfString:cheery].location != NSNotFound) {
+            cheerymanager = [[CheeryManager alloc]init];
+            restaurantKitchen.kitchenDelegate = cheerymanager;
+        }
+        else if ([chosenManager rangeOfString:chooseManager].location != NSNotFound){
+            manager = [[Manager alloc]init];
+            restaurantKitchen.kitchenDelegate = manager;
+        }
+        else {
+            NSLog(@"There is no manager so the kitchen staff came to greet you");
+        }
+            
+            
+    //  PIZZA!!
+        
+        NSLog(@"Please pick your pizza size and toppings:");
             
             NSLog(@"> ");
             char str[100];
@@ -41,14 +69,27 @@ int main(int argc, const char * argv[])
             NSString *firstCommand = [mutableCommandWords firstObject];
             [mutableCommandWords removeObjectAtIndex:0];
             
-            firstCommand = [firstCommand uppercaseString];
+            firstCommand = [firstCommand lowercaseString];
             PizzaSize size = [firstCommand intValue];
+            
+            if ([firstCommand isEqualToString:@"small"]) {
+                size = small;
+            }else if ([firstCommand isEqualToString:@"medium"]){
+                size = medium;
+            }else if ([firstCommand isEqualToString:@"large"]){
+                size = large;
+            }
             
             // And then send some message to the kitchen...
         
             Pizza *orderIn = [restaurantKitchen makePizzaWithSize:size toppings:mutableCommandWords];
-            NSLog(@"%ld", (long)size);
-            NSLog(@"%@", mutableCommandWords);
+            if (orderIn) {
+                NSLog(@"%ld", orderIn.pizzaSize);
+                NSLog(@"%@", mutableCommandWords);
+            }
+            else{
+                NSLog(@"you didn't order");
+            }
             
 //            NSLog(@"%@", );
              }
